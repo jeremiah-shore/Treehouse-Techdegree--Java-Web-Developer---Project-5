@@ -18,13 +18,34 @@ import java.util.List;
 public class CountryController {
     @Autowired private CountryRepository countryRepository;
 
-    // TODO: enable "/" to redirect to "/countries
-
     @RequestMapping("/")
+    public String index(ModelMap modelMap) {
+        return listCountries(modelMap);
+    }
+
+    @RequestMapping("/countries")
     public String listCountries(ModelMap modelMap) {
-        List<Country> countries = countryRepository.getAllCountries();
-        modelMap.put("countries", countries);
+        if(modelMap.get("countries") == null) {
+            List<Country> countries = countryRepository.getAllCountries();
+            modelMap.put("countries", countries);
+        }
         return "home";
+    }
+
+    @RequestMapping("/countries/sort/{sortMethod}")
+    public String listSortedCountries(@PathVariable String sortMethod, ModelMap modelMap) {
+        List<Country> countries = countryRepository.getAllCountries();
+        switch (sortMethod) {
+            case "name":
+                countries.sort((Country o1, Country o2) -> o1.getName().compareTo(o2.getName()));
+                break;
+            case "population":
+                countries.sort((Country o1, Country o2) -> o2.getPopulation() - o1.getPopulation()); //o2 first to sort descending (greatest population)
+                break;
+        }
+        modelMap.put("countries", countries);
+        modelMap.put("sortmethod", sortMethod);
+        return listCountries(modelMap);
     }
 
     @RequestMapping("/countries/{name}")

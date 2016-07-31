@@ -1,5 +1,7 @@
 package net.jeremiahshore.cotw.model;
 
+import java.text.NumberFormat;
+
 /**
  * Created by Jeremiah on 7/30/2016.
  */
@@ -27,6 +29,10 @@ public class Country {
 
     public int getPopulation() {
         return population;
+    }
+
+    public String getPopulationText() {
+        return NumberFormat.getIntegerInstance().format(population);
     }
 
     public void setPopulation(int population) {

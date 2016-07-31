@@ -8,15 +8,24 @@
 <body>
     <header>
         <div class="container">
-            <h1><a href="index.html">Countries of the World</a></h1>
+            <h1><a href="/countries">Countries of the World</a></h1>
         </div>
     </header>
-    <div class="container">
+    <div class="container sort">
+        sort by:<ul>
+            <li th:class="'button ' + (${sortmethod == 'name'} ? 'sort-method' : '')"><a href="/countries/sort/name">name</a></li>
+            <li th:class="'button ' + (${sortmethod == 'population'} ? 'sort-method' : '')"><a href="/countries/sort/population">population</a></li>
+            <!-- I know I could do this more dynamically, but with only a few pieces of data to sort with and with such
+            a small repository, there is no point -->
+        </ul>
+    </div>
+    <div class="container countries">
         <!-- begin country iteration -->
         <div class="country" th:each="country : ${countries}">
             <a th:href="'/countries/' + ${country.name}">
                 <img th:src="'/flags/' + ${country.name} + '.png'" th:alt="'Flag of ' + ${country.name}"/>
                 <h4 th:text="${country.name}">Country Name</h4>
+                <p th:text="'pop: ' + ${country.populationText}">population</p>
             </a>
         </div>
         <!-- end country iteration -->
